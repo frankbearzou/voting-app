@@ -1,0 +1,66 @@
+<section ng-init="read()" class="popupContainer">
+  <script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-title">I'm a modal!!!!</h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+
+      Selected:
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button">OK</button>
+      <button class="btn btn-warning" type="button">Cancel</button>
+    </div>
+  </script>
+
+  <div class="page-header">
+    <h1 ng-bind="poll.title"></h1>
+  </div>
+  <div>
+    <div class="col-md-4">
+      <h3>I'd like to vote for...:</h3>
+      <select id="selectedOption" name="selectedOption" ng-model="selectedOption">
+        <option value="" disabled>Choose an option...: </option>
+        <option ng-repeat="option in poll.options" value="{{option.name}}">{{option.name}}</option>
+        <option value="===custom-option">I'd like a custom option</option>
+      </select>
+      selectedOption: {{selectedOption}}
+      <div class="" ng-show="selectedOption === '===custom-option'">
+        <label for="custom-option">Vote with my own option: </label>
+        <input type="text" name="custom-option" id="custom-option" ng-model="voteforCustom">
+        voteforCustom: {{voteforCustom}}
+      </div>
+      <div class="col-xs-12" style="margin-top: 30px">
+        <button type="button" class="btn btn-primary" ng-click="vote()">Submit</button>
+      </div>
+    </div>
+    <div class="col-md-offset-4 col-md-4">
+      labels:{{labels}}
+      data: {{data}}
+      <canvas id="doughnut" class="chart chart-doughnut" width="400" height="400"
+              chart-data="data" chart-labels="labels" chart-options="options">
+      </canvas>
+    </div>
+  </div>
+  <div class="pull-right"
+       ng-show="poll.isCurrentUserOwner">
+    <a class="btn btn-primary"
+       ui-sref="polls.edit({ pollId: vm.poll._id })">
+      <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    <a class="btn btn-primary" ng-click="vm.remove()">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+  <small>
+    <em class="text-muted">
+      Posted on
+      <span ng-bind="poll.created | date:'mediumDate'"></span>
+      by
+      <span ng-if="poll.user"
+            ng-bind="poll.user.displayName"></span>
+      <span ng-if="!poll.user">Deleted User</span>
+    </em>
+  </small>
+  <p class="lead" ng-bind="poll.content"></p>
+</section>

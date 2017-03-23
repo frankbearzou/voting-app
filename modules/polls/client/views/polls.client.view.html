@@ -1,0 +1,24 @@
+<section ng-init="list()">
+  <div class="jumbotron text-center">
+    <div class="row">
+      <h1>FCC Voting App</h1>
+    </div>
+    <div class="row">
+      <p class="lead">
+        Below are polls hosted by FCC Voting App.
+      </p>
+      {{authentication.user}}
+      <p ng-show="authentication.user">Select a poll to see the results and vote, <a>or make a new poll!</a> </p>
+      <p ng-show="!authentication.user">Select a poll to see the results and vote, or sign-in to make a new poll.</p>
+      {{polls}}
+      <div class="list-group" ng-repeat="poll in polls">
+        <a ui-sref="polls-view({pollId:poll._id})" class="list-group-item">{{poll.title}}</a>
+      </div>
+    </div>
+
+  </div>
+
+  <br>Enjoy &amp; Keep Us Updated,
+  <br>By Frank Zou
+  <br>Check source code on <a href="https://github.com/frankbearzou/voting-app/" target="_blank">GitHub</a>
+</section>
