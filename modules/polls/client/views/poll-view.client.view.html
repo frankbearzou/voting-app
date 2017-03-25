@@ -19,37 +19,38 @@
   <div>
     <div class="col-md-4">
       <h3>I'd like to vote for...:</h3>
-      <select id="selectedOption" name="selectedOption" ng-model="selectedOption">
+      <select id="selectedOption" class="form-control" name="selectedOption" ng-model="selectedOption">
         <option value="" disabled>Choose an option...: </option>
         <option ng-repeat="option in poll.options" value="{{option.name}}">{{option.name}}</option>
         <option value="===custom-option">I'd like a custom option</option>
       </select>
-      selectedOption: {{selectedOption}}
-      <div class="" ng-show="selectedOption === '===custom-option'">
+      <div class="form-group" ng-show="selectedOption === '===custom-option'">
         <label for="custom-option">Vote with my own option: </label>
         <input type="text" name="custom-option" id="custom-option" ng-model="voteforCustom">
-        voteforCustom: {{voteforCustom}}
       </div>
-      <div class="col-xs-12" style="margin-top: 30px">
-        <button type="button" class="btn btn-primary" ng-click="vote()">Submit</button>
+      <div class="row text-center">
+        <div class="col-md-12" style="margin-top: 30px">
+          <button type="button" class="btn btn-primary btn-block" ng-click="vote()">Submit</button>
+        </div>
       </div>
+      <div class="row text-center">
+        <div class="col-md-12" style="margin-top: 30px">
+          <a href={{url}} target="_blank" class="btn btn-block" style="background: #4099FF; color: #fff;">
+            <i class="fa fa-twitter"></i> Share on Twitter</a>
+        </div>
+      </div>
+
     </div>
     <div class="col-md-offset-4 col-md-4">
-      labels:{{labels}}
-      data: {{data}}
       <canvas id="doughnut" class="chart chart-doughnut" width="400" height="400"
               chart-data="data" chart-labels="labels" chart-options="options">
       </canvas>
     </div>
   </div>
   <div class="pull-right"
-       ng-show="poll.isCurrentUserOwner">
-    <a class="btn btn-primary"
-       ui-sref="polls.edit({ pollId: vm.poll._id })">
-      <i class="glyphicon glyphicon-edit"></i>
-    </a>
-    <a class="btn btn-primary" ng-click="vm.remove()">
-      <i class="glyphicon glyphicon-trash"></i>
+       ng-show="poll.owner === authentication.user.username">
+    <a class="btn btn-danger" ng-click="delete()">
+      <i class="glyphicon glyphicon-trash"></i> delete
     </a>
   </div>
   <small>

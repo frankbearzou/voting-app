@@ -27,7 +27,14 @@
     Menus.addSubMenuItem('topbar', 'polls', {
       title: 'Create Poll',
       state: 'polls-create',
-      roles: ['user']
+      roles: ['user', 'admin']
+    });
+
+    // Add the dropdown my polls list item
+    Menus.addSubMenuItem('topbar', 'polls', {
+      title: 'My Poll',
+      state: 'polls-my-polls',
+      roles: ['user', 'admin']
     });
   }
 })();

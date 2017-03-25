@@ -14,8 +14,17 @@
       .state('polls-list', {
         url: '/polls/polls-list',
         templateUrl: 'modules/polls/client/views/polls.client.view.html',
-        controller: 'PollsController',
-        controllerAs: 'vm'
+        controller: 'PollsController'
+      })
+      .state('polls-my-polls', {
+        url: '/polls/polls-my-polls',
+        templateUrl: 'modules/polls/client/views/polls-my-polls.client.view.html',
+        controller: 'PollsController'
+      })
+      .state('polls-create', {
+        url: '/polls/polls-create',
+        templateUrl: 'modules/polls/client/views/polls-create.client.view.html',
+        controller: 'PollsController'
       })
       .state('polls-view', {
         url: '/polls/:pollId',

@@ -5,16 +5,49 @@
     .module('polls')
     .controller('PollsController', PollsController);
 
-  PollsController.$inject = ['$scope', '$state', '$stateParams', '$http', '$window', 'Authentication'];
+  PollsController.$inject = ['$scope', '$state', '$stateParams', '$http', '$window', '$location', 'Authentication'];
 
-  function PollsController($scope, $state, $stateParams, $http, $window, Authentication) {
+  function PollsController($scope, $state, $stateParams, $http, $window, $location, Authentication) {
     var vm = this;
 
     $scope.authentication = Authentication;
 
-    // Polls controller logic
+    // create a new poll
+    $scope.create = function (isValid) {
+      if (!isValid) {
+        console.log('invalid');
+        return false;
+      }
+
+      var title = $scope.title;
+      var options = $scope.options;
+
+      console.log('original options: ', options);
+      options = options.split("\n");
+      console.log('new options: ', options);
+
+      var params = {
+        title: title,
+        options: options
+      };
+
+      $http.post('/api/polls', params).then(function (response) {
+        var pollId = response.data.pollId;
+        $state.go('polls-my-polls');
+      });
+    };
+
+    // list all polls
     $scope.list = function () {
       $http.get('/api/polls').then(function (response) {
+        $scope.polls = response.data;
+        console.log(response.data);
+      });
+    };
+
+    // list my polls
+    $scope.list_my_polls = function () {
+      $http.get('/api/mypolls').then(function (response) {
         $scope.polls = response.data;
         console.log(response.data);
       });
@@ -37,8 +70,14 @@
           data.push(obj.count);
         });
       }).then(function () {
+        // set data for charts
         $scope.labels = labels;
         $scope.data = data;
+      }).then(function () {
+        // set data for sharing
+        $scope.url = 'https://twitter.com/share?url=' + $location.absUrl() +
+          '&text=' + encodeURIComponent('share polls ' +
+            $scope.poll.title);
       });
 
       $scope.error = null;
@@ -56,6 +95,20 @@
           position: 'bottom'
         }
       };
+    };
+
+    $scope.delete = function () {
+      var pollId = $stateParams.pollId;
+
+      if (confirm('Do you want to delete this post?')) {
+        $http.delete('/api/polls/' + pollId).then(function (response) {
+          $state.go('polls-list');
+        }, function (data, status) {
+          $window.alert(data.message);
+        });
+      }
+
+
     };
 
     // vote

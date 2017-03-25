@@ -13,7 +13,30 @@ var path = require('path'),
  * Create a Poll
  */
 exports.create = function (req, res) {
+  let params = req.body;
+  const owner = req.user.username;
 
+  let options = [];
+  params.options.forEach(option => options.push({ name: option, count: 0 }));
+
+  const poll = new Poll({
+    owner,
+    title: params.title,
+    options
+  });
+
+  poll.save(function (err, poll, numAffected) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send({
+        message: err
+      });
+    } else {
+      res.json({
+        'message': 'success'
+      });
+    }
+  });
 };
 
 /**
@@ -39,14 +62,42 @@ exports.read = function (req, res) {
  * Update a Poll
  */
 exports.update = function (req, res) {
+  const pollId = req.params.pollId;
+  const username = req.user.username;
 
+  Poll.findOneAndRemove({ _id: pollId, owner: username }, function (err, doc) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      if (doc.result.n === 0) {
+        return res.status(400).send({
+          message: 'error: you do not have right to delete this poll!'
+        });
+      } else {
+        res.json({ message: 'success' });
+      }
+    }
+  });
 };
 
 /**
  * Delete an Poll
  */
 exports.delete = function (req, res) {
+  const pollId = req.params.pollId;
+  const owner = req.user.username;
 
+  Poll.findOneAndRemove({ _id: pollId, owner:  owner }, function (err, poll) {
+    if (err) {
+      return res.status(500).send({
+        message: err.error
+      });
+    } else {
+      res.json({ message: 'success' });
+    }
+  });
 };
 
 /**
@@ -54,6 +105,24 @@ exports.delete = function (req, res) {
  */
 exports.list = function (req, res) {
   Poll.find().sort('-created').select('title').exec(function(err, polls) {
+    if (err) {
+      console.log('error:!!!!!!!!!!');
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      console.log('polls: ', polls);
+      res.json(polls);
+    }
+  });
+};
+
+/**
+ * List of my Polls
+ */
+exports.list_my_polls = function (req, res) {
+  const username = req.user.username;
+  Poll.find({ 'owner': username }).sort('-created').select('title').exec(function(err, polls) {
     if (err) {
       console.log('error:!!!!!!!!!!');
       return res.status(400).send({
@@ -106,10 +175,10 @@ exports.vote = function (req, res) {
           console.log('option1: ', option);
           Poll.findOneAndUpdate({
             _id: _id,
-            "options.name": option
+            'options.name': option
           }, {
-            $inc: { "options.$.count": 1 },
-            $push: { "votedBy": { $each: [username, ip] } }
+            $inc: { 'options.$.count': 1 },
+            $push: { 'votedBy': { $each: [username, ip] } }
           }, function (err, poll) {
             if (err) {
               return res.status(400).send({
@@ -117,7 +186,7 @@ exports.vote = function (req, res) {
               });
             } else {
               res.json({
-                message: "voted success"
+                message: 'voted success'
               });
             }
 
@@ -130,18 +199,18 @@ exports.vote = function (req, res) {
             _id: _id
           }, {
             $push: {
-              "options":  { "name": newOption, "count": 1 },
-              "votedBy": { $each: [username, ip] }
+              'options':  { 'name': newOption, 'count': 1 },
+              'votedBy': { $each: [username, ip] }
             },
           }, function (err, poll) {
             if (err) {
               console.log('here: ', err);
               return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
+                message: err.message
               });
             } else {
               res.json({
-                message: "voted success"
+                message: 'voted success'
               });
             }
           });

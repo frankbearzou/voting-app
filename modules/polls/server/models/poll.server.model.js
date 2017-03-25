@@ -21,6 +21,7 @@ var PollSchema = new Schema({
     required: true
   },
   options: [{
+    _id: false,
     name: {
       type: String,
       required: 'option name',
@@ -30,7 +31,7 @@ var PollSchema = new Schema({
       type: Number,
       required: 'count',
       default: 1,
-      min: 1
+      min: 0
     }
   }],
   votedBy: [String],
