@@ -1,7 +1,6 @@
 # Voting App
-This app is currently under development. Once finished, The live domo will be published. 
 
-live demo: 
+Check live demo at: [heroku](https://frankzou-voting-app.herokuapp.com).
 
 ## User stories
 - User Story: As an authenticated user, I can keep my polls and come back later to access them.
