@@ -3,12 +3,12 @@
   <form name="pollForm" role="form" ng-submit="create(pollForm.$valid)" novalidate>
     <div class="form-group" ng-class="{'has-error': pollForm.title.$invalid && pollForm.title.$touched}">
       <label for="title">Title: </label>
-      <input type="text" class="form-control" id="title" name="title" ng-model="title" required ng-minlength="1" ng-maxlength="20">
+      <input type="text" class="form-control" id="title" name="title" ng-model="title" required ng-minlength="1" ng-maxlength="50">
       <p ng-show="pollForm.title.$invalid && pollForm.title.$touched" class="help-block">title length should between 1 and 20</p>
     </div>
     <div class="form-group" ng-class="{'has-error': pollForm.options.$invalid && pollForm.options.$touched}">
       <label for="options">Options (seperated by line):</label>
-      <textarea name="options" id="options" ng-model="options" class="form-control" rows="10" required ng-maxlength="40"></textarea>
+      <textarea name="options" id="options" ng-model="options" class="form-control" rows="10" required ng-maxlength="50"></textarea>
       <p ng-show="pollForm.options.$invalid && pollForm.options.$touched" class="help-block">options length should between 1 and 40</p>
     </div>
     <div class="form-group">

@@ -23,7 +23,7 @@
       var options = $scope.options;
 
       console.log('original options: ', options);
-      options = options.split("\n");
+      options = options.split('\n');
       console.log('new options: ', options);
 
       var params = {
