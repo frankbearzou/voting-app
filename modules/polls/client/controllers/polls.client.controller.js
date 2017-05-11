@@ -64,6 +64,7 @@
         $scope.poll = response.data;
         console.log(response.data);
         console.log($scope.poll);
+        console.log($scope.authentication.user);
       }).then(function () {
         $scope.poll.options.forEach(function (obj) {
           labels.push(obj.name);

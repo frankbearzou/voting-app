@@ -30,7 +30,7 @@
       </div>
       <div class="row text-center">
         <div class="col-md-12" style="margin-top: 30px">
-          <button type="button" class="btn btn-primary btn-block" ng-click="vote()">Submit</button>
+          <button type="button" class="btn btn-primary btn-block" ng-click="vote()" ng-disabled="!authentication.user">Submit</button>
         </div>
       </div>
       <div class="row text-center">
@@ -60,7 +60,7 @@
       by
       <span ng-if="poll.user"
             ng-bind="poll.user.displayName"></span>
-      <span ng-if="!poll.user">Deleted User</span>
+      <span ng-if="!poll.user">{{poll.owner}}</span>
     </em>
   </small>
   <p class="lead" ng-bind="poll.content"></p>
